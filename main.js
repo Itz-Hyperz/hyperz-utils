@@ -1,8 +1,7 @@
-const moment = require('moment-timezone');
-const filedl = require("nodejs-file-downloader");
+const fs = require('fs');
+const path = require('path')
+const fileDl = require("fax-downloader");
 const figlet = require('figlet');
-const fastFolderSizeSync = require('fast-folder-size/sync');
-const converter = require('byte-converter').converterBase2;
 const md = require('markdown-it-faxes')({
     html: false, // Enable HTML tags in source
     xhtmlOut: false, // Use '/' to close single tags (<br />).
@@ -11,97 +10,124 @@ const md = require('markdown-it-faxes')({
 }).use(require('markdown-it-highlightjs'), { code: true });
 let defaultFonts = ["Graffiti", "Standard", "Stop", "Slant", "Pagga", "Larry 3D"];
 
-async function figlify(text, options) {
-    if(typeof options.font == 'undefined') {
-        if(typeof options.randFont == 'undefined' || options.randFont == false) {
+function figlify(text, options) {
+    if (typeof options.font == 'undefined') {
+        if (typeof options.randFont == 'undefined' || options.randFont == false) {
             figlet.text(text, { font: 'Standard', width: options.width || 700 }, function(err, data) {
-                if(err) throw err;
+                if (err) throw err;
                 let str = `${data}\n-------------------------------------------`
                 console.log(chalk.bold(chalk.blueBright(str)));
             });
         } else {
-            let chosen = await getRandomArray(defaultFonts);
+            let chosen = getRandomArray(defaultFonts);
             figlet.text(text, { font: chosen, width: options.width || 700 }, function(err, data) {
-                if(err) throw err;
+                if (err) throw err;
                 let str = `${data}\n-------------------------------------------`
                 console.log(chalk.bold(chalk.blueBright(str)));
             });
         }
     } else {
         figlet.text(text, { font: options.font, width: options.width || 700 }, function(err, data) {
-            if(err) throw err;
+            if (err) throw err;
             let str = `${data}\n-------------------------------------------`
             console.log(chalk.bold(chalk.blueBright(str)));
         });
     }
 };
 
-async function mdConvert(content) {
-    let rendered = await md.render(content);
-    return rendered;
+/**
+ * Convert Markdown to HTML
+ * @param {String} content what to convert
+ * @returns {String} HTML
+ */
+function mdConvert(content) {
+    return md.render(content);;
 };
 
-async function generateRandom(length) {
-    let result           = '';
-    let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let charactersLength = characters.length;
-    for ( let i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+/**
+ * Get a randomised string.
+ * @param {Number} length amount of characters to generate
+ */
+function generateRandom(length) {
+    let r = '';
+    let c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < length; i++) {
+        r += c.charAt(Math.floor(Math.random() * c.length));
     }
-    return result;
+    return r;
 };
 
-async function sanitize(value, bypassScripting) {
-    if(!bypassScripting || typeof bypassScripting == 'undefined') {
-        if(value.toLowerCase().includes('</')) {
-            value = await value.replaceAll('<', 'NULLED:lessThan').replaceAll('>', 'NULLED:greaterThan');
+/**
+ * 
+ * @param {String} value value to sanitize
+ * @param {Boolean} bypassScripting Remove HTML tags?
+ * @returns {String} sanitized SQL values
+ */
+function sanitize(value, bypassScripting) {
+    if (!bypassScripting || typeof bypassScripting == 'undefined') {
+        if (value.toLowerCase().includes('</')) {
+            value = value.replaceAll('<', 'NULLED:lessThan').replaceAll('>', 'NULLED:greaterThan');
         };
     };
-    value = await value.replaceAll('"', '\'').replaceAll('`', '\`').replaceAll("'", "\'");
+    value = value.replaceAll('"', '\'').replaceAll('`', '\`').replaceAll("'", "''");
     return value;
 };
 
-async function saveFile(url, name, type, dir, clonefiles) {
+/**
+ * 
+ * @param {String} url The URL to fetch the file from
+ * @param {String} dest Destination to download the files to
+ * @param {Object} options Request options. Eg; header {}
+ * @returns {Boolean}
+ */
+function saveFile(url, dest, options = {}) {
     try {
-        const downloader = new filedl({
-            url: url, //If the file name already exists, a new file with the name 200MB1.zip is created.
-            directory: dir, //This folder will be created, if it doesn't exist.
-            fileName: `${name}.${type}`,
-            cloneFiles: clonefiles || false
+        fileDl.getFile(url, dest, options).then(function(filename) {
+            return true;
         });
-        await downloader.download();
-    } catch(e) {};
-};
-
-async function getDate() {
-    let date = new Date().toDateString();
-    return date;
-};
-
-async function fetchTime(tz, format) {
-    let datethingy = moment.tz(tz).format(format);
-    return datethingy;
-};
-
-async function getRandomArray(array) {
-    let bruh = array[Math.floor(array.length * Math.random())];
-    return bruh;
-};
-
-async function checkIfHex(item) {
-    if(item.toUpperCase().startsWith('#')) {
-        return { pass: true };
-    } else {
-        return { pass: false, item: `#${item}` };
+    } catch (e) {
+        return false
     };
 };
 
-async function dirSize(directory) {
-    let final;
-    let bytes = fastFolderSizeSync(directory);
-    final = await converter(bytes, 'B', 'MB'); // Bytes to MB
-    final = Number(final).toFixed(2);
-    return final;
+/**
+ * Get the current date. 
+ * @returns {Object}  Returns the date string and unix timestamp.
+ */
+function getDate() {
+    return { s: new Date().toDateString(), n: Date.now() };
+};
+
+/**
+ * Get a random index from an array.
+ * @param {Array} array 
+ * @returns {number} the random index
+ */
+function getRandomArray(array) {
+    return array[Math.floor(array.length * Math.random())];
+};
+
+
+/**
+ * Verify hex color code.
+ * @param {String} hex 
+ * @returns {Boolean} boolean if HEX valid or not
+ */
+function verifyColorHex(hex) {
+    let rx = /^#([0-9a-f]{3}){1,2}$/i;
+    if (rx.test(hex)) return true;
+    return false;
+};
+
+/**
+ * Get the directory size
+ * @param {String} directory The directory to get the total size of
+ * @return {Number} Value of the directory size in bytes.
+ */
+async function dirSize(d) {
+    let f = fs.readdirSync(d);
+    let s = f.map(file => fs.statSync(path.join(d, file)));
+    return (await Promise.all(s)).reduce((acc, { size }) => acc + size, 0)
 };
 
 module.exports = {
@@ -111,8 +137,7 @@ module.exports = {
     sanitize: sanitize,
     saveFile: saveFile,
     getDate: getDate,
-    fetchTime: fetchTime,
     getRandomArray: getRandomArray,
-    checkIfHex: checkIfHex,
+    verifyColorHex: verifyColorHex,
     dirSize: dirSize
 };
