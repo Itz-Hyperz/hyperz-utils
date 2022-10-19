@@ -104,6 +104,11 @@ async function dirSize(directory) {
     return final;
 };
 
+async function getDiscountedValue(totalValue, discount) { // 34.99 and 20 for a 20% discount
+    let a = totalValue - ((totalValue / 10) * (discount * .10));
+    return a;
+};
+
 module.exports = {
     figlify: figlify,
     mdConvert: mdConvert,
