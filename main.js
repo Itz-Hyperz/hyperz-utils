@@ -119,5 +119,6 @@ module.exports = {
     fetchTime: fetchTime,
     getRandomArray: getRandomArray,
     checkIfHex: checkIfHex,
-    dirSize: dirSize
+    dirSize: dirSize,
+    getDiscountedValue: getDiscountedValue
 };
