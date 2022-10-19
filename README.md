@@ -14,6 +14,7 @@ A simple utilities package that offers many different functions that could be of
 - [getRandomArray](#getRandomArray)
 - [checkIfHex](#checkIfHex)
 - [dirSize](#dirSize)
+- [getDiscountedValue](#getDiscountedValue)
 
 ---
 
@@ -100,6 +101,16 @@ View the directory size of a folder.
     const utils = require('hyperz-utils');
     let size = await utils.dirSize("./src/images");
     console.log(size);
+```
+
+# getDiscountedValue
+Get the discounted amount of a total value.
+```js
+const utils = require('hyperz-utils');
+let totalValue = 34.99; // Price
+let discount = 30; // 30%
+let newValue = await utils.getDiscountedValue(totalValue, discount);
+console.log(newValue) // 10.497 (30% of 34.99)
 ```
 
 ---
