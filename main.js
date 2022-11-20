@@ -2,6 +2,7 @@ const moment = require('moment-timezone');
 const filedl = require("nodejs-file-downloader");
 const figlet = require('figlet');
 const fastFolderSizeSync = require('fast-folder-size/sync');
+const chalk = require('chalk');
 const converter = require('byte-converter').converterBase2;
 const md = require('markdown-it-faxes')({
     html: true, // Enable HTML tags in source
@@ -105,7 +106,7 @@ async function dirSize(directory) {
 };
 
 async function getDiscountedValue(totalValue, discount) { // 34.99 and 20 for a 20% discount
-    let a = totalValue - ((totalValue / 10) * (discount * .10));
+    let a = Math.round(100*(totalValue - ((totalValue / 10) * (discount * .10))))/100;
     return a;
 };
 
