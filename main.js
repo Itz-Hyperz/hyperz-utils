@@ -13,24 +13,24 @@ const md = require('markdown-it-faxes')({
 let defaultFonts = ["Graffiti", "Standard", "Stop", "Slant", "Pagga", "Larry 3D"];
 
 async function figlify(text, options) {
-    if(typeof options.font == 'undefined') {
-        if(typeof options.randFont == 'undefined' || options.randFont == false) {
-            figlet.text(text, { font: 'Standard', width: options.width || 700 }, function(err, data) {
-                if(err) throw err;
+    if (typeof options.font == 'undefined') {
+        if (typeof options.randFont == 'undefined' || options.randFont == false) {
+            figlet.text(text, { font: 'Standard', width: options.width || 700 }, function (err, data) {
+                if (err) throw err;
                 let str = `${data}\n-------------------------------------------`
                 console.log(chalk.bold(chalk.blueBright(str)));
             });
         } else {
             let chosen = await getRandomArray(defaultFonts);
-            figlet.text(text, { font: chosen, width: options.width || 700 }, function(err, data) {
-                if(err) throw err;
+            figlet.text(text, { font: chosen, width: options.width || 700 }, function (err, data) {
+                if (err) throw err;
                 let str = `${data}\n-------------------------------------------`
                 console.log(chalk.bold(chalk.blueBright(str)));
             });
         }
     } else {
-        figlet.text(text, { font: options.font, width: options.width || 700 }, function(err, data) {
-            if(err) throw err;
+        figlet.text(text, { font: options.font, width: options.width || 700 }, function (err, data) {
+            if (err) throw err;
             let str = `${data}\n-------------------------------------------`
             console.log(chalk.bold(chalk.blueBright(str)));
         });
@@ -43,18 +43,18 @@ async function mdConvert(content) {
 };
 
 async function generateRandom(length) {
-    let result           = '';
-    let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let charactersLength = characters.length;
-    for ( let i = 0; i < length; i++ ) {
+    for (let i = 0; i < length; i++) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
 };
 
 async function sanitize(value, bypassScripting) {
-    if(!bypassScripting || typeof bypassScripting == 'undefined') {
-        if(value.toLowerCase().includes('</')) {
+    if (!bypassScripting || typeof bypassScripting == 'undefined') {
+        if (value.toLowerCase().includes('</')) {
             value = await value.replaceAll('<', 'NULLED:lessThan').replaceAll('>', 'NULLED:greaterThan');
         };
     };
@@ -71,7 +71,7 @@ async function saveFile(url, name, type, dir, clonefiles) {
             cloneFiles: clonefiles || false
         });
         await downloader.download();
-    } catch(e) {};
+    } catch (e) { };
 };
 
 async function getDate() {
@@ -90,7 +90,7 @@ async function getRandomArray(array) {
 };
 
 async function checkIfHex(item) {
-    if(item.toUpperCase().startsWith('#')) {
+    if (item.toUpperCase().startsWith('#')) {
         return { pass: true };
     } else {
         return { pass: false, item: `#${item}` };
@@ -106,8 +106,12 @@ async function dirSize(directory) {
 };
 
 async function getDiscountedValue(totalValue, discount) { // 34.99 and 20 for a 20% discount
-    let a = Math.round(100*(totalValue - ((totalValue / 10) * (discount * .10))))/100;
+    let a = Math.round(100 * (totalValue - ((totalValue / 10) * (discount * .10)))) / 100;
     return a;
+};
+
+const print = async function (data) {
+    await console.log(data);
 };
 
 module.exports = {
@@ -121,5 +125,6 @@ module.exports = {
     getRandomArray: getRandomArray,
     checkIfHex: checkIfHex,
     dirSize: dirSize,
-    getDiscountedValue: getDiscountedValue
+    getDiscountedValue: getDiscountedValue,
+    print: print
 };
