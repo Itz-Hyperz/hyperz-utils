@@ -11,6 +11,7 @@ const md = require('markdown-it-hyperz')({
     linkify: false // Autoconvert URL-like text to links
 }).use(require('markdown-it-highlightjs'), { code: true });
 let defaultFonts = ["Graffiti", "Standard", "Stop", "Slant", "Pagga", "Larry 3D"];
+let choices = [1,2,3,4,5,6]
 
 async function figlify(text, options) {
     if(typeof options.font == 'undefined') {
@@ -108,6 +109,30 @@ async function dirSize(directory) {
 async function getDiscountedValue(totalValue, discount) { // 34.99 and 20 for a 20% discount
     let a = Math.round(100*(totalValue - ((totalValue / 10) * (discount * .10))))/100;
     return a;
+};
+
+async function randomColor(content) {
+    let random = await getRandomArray(choices);
+    switch(random) {
+        case 1:
+            console.log(chalk.blue(content));
+            break;
+        case 2:
+            console.log(chalk.yellow(content));
+            break;
+        case 3:
+            console.log(chalk.green(content));
+            break;
+        case 4:
+            console.log(chalk.red(content));
+            break;
+        case 5:
+            console.log(chalk.magenta(content));
+            break;
+        case 6:
+            console.log(chalk.white(content));
+            break;
+    };
 };
 
 module.exports = {
