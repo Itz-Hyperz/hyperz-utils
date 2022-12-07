@@ -146,5 +146,6 @@ module.exports = {
     getRandomArray: getRandomArray,
     checkIfHex: checkIfHex,
     dirSize: dirSize,
-    getDiscountedValue: getDiscountedValue
+    getDiscountedValue: getDiscountedValue,
+    randomColor: randomColor
 };
