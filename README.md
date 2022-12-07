@@ -15,6 +15,7 @@ A simple utilities package that offers many different functions that could be of
 - [checkIfHex](#checkIfHex)
 - [dirSize](#dirSize)
 - [getDiscountedValue](#getDiscountedValue)
+- [randomColor](#randomColor)
 
 ---
 
@@ -111,6 +112,13 @@ let totalValue = 34.99; // Price
 let discount = 30; // 30%
 let newValue = await utils.getDiscountedValue(totalValue, discount);
 console.log(newValue) // 10.497 (30% of 34.99)
+```
+
+# randomColor
+Get a random color logged to the console.
+```js
+const utils = require('hyperz-utils');
+utils.randomColor("Wow a random color!!!");
 ```
 
 ---
