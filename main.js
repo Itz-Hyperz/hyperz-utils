@@ -4,7 +4,7 @@ const figlet = require('figlet');
 const fastFolderSizeSync = require('fast-folder-size/sync');
 const chalk = require('chalk');
 const converter = require('byte-converter').converterBase2;
-const md = require('markdown-it-faxes')({
+const md = require('markdown-it-hyperz')({
     html: true, // Enable HTML tags in source
     xhtmlOut: false, // Use '/' to close single tags (<br />).
     breaks: true, // Convert '\n' in paragraphs into <br>
