@@ -59,7 +59,7 @@ async function sanitize(value, bypassScripting) {
             value = await value.replaceAll('<', 'NULLED:lessThan').replaceAll('>', 'NULLED:greaterThan');
         };
     };
-    value = await value.replaceAll('"', '\'').replaceAll('`', '\`').replaceAll("'", "\'");
+    value = await value.replaceAll('"', '\"').replaceAll('`', '\`').replaceAll("'", "\'");
     return value;
 };
 
