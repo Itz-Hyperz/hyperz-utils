@@ -43,13 +43,14 @@ async function mdConvert(content) {
     return rendered;
 };
 
-async function generateRandom(length) {
+async function generateRandom(length, bypassDate) {
     let result           = '';
     let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let charactersLength = characters.length;
     for ( let i = 0; i < length; i++ ) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
+    };
+    if(!bypassDate) result = Date.now().toString() + result;
     return result;
 };
 
