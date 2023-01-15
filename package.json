@@ -1,6 +1,6 @@
 {
   "name": "hyperz-utils",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A simple utilities package that offers many different functions that could be of use to you when writing ExpressJS websites or Discord bots!",
   "main": "main.js",
   "scripts": {
