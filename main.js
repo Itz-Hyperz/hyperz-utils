@@ -10,6 +10,26 @@ const md = require('markdown-it-hyperz')({
     breaks: true, // Convert '\n' in paragraphs into <br>
     linkify: false // Autoconvert URL-like text to links
 }).use(require('markdown-it-highlightjs'), { code: true });
+md.use(require('markdown-it-container'), 'info', {
+    render: function (tokens, idx) {
+        if(tokens[idx].nesting === 1) {return `<div class="convertinfo">\n`;} else {return '</div>\n';}
+    }
+});
+md.use(require('markdown-it-container'), 'success', {
+    render: function (tokens, idx) {
+        if(tokens[idx].nesting === 1) {return `<div class="convertsuccess">\n`;} else {return '</div>\n';}
+    }
+});
+md.use(require('markdown-it-container'), 'warning', {
+    render: function (tokens, idx) {
+        if(tokens[idx].nesting === 1) {return `<div class="convertwarning">\n`;} else {return '</div>\n';}
+    }
+});
+md.use(require('markdown-it-container'), 'danger', {
+    render: function (tokens, idx) {
+        if(tokens[idx].nesting === 1) {return `<div class="convertdanger">\n`;} else {return '</div>\n';}
+    }
+});
 let defaultFonts = ["Graffiti", "Standard", "Stop", "Slant", "Pagga", "Larry 3D"];
 let choices = [1,2,3,4,5,6]
 
