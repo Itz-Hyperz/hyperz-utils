@@ -1,6 +1,6 @@
 {
   "name": "hyperz-utils",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A simple utilities package that offers many different functions that could be of use to you when writing ExpressJS websites or Discord bots!",
   "main": "main.js",
   "scripts": {
@@ -32,8 +32,9 @@
     "byte-converter": "^0.1.4",
     "fast-folder-size": "^1.7.1",
     "figlet": "^1.5.2",
-    "markdown-it-hyperz": "^1.1.4",
+    "markdown-it-container": "^3.0.0",
     "markdown-it-highlightjs": "^4.0.1",
+    "markdown-it-hyperz": "^1.1.4",
     "moment-timezone": "^0.5.37",
     "nodejs-file-downloader": "^4.10.2"
   }
